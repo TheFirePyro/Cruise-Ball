@@ -2,7 +2,7 @@
 
 namespace Tmpl8 
 {
-	void Menu::Init(const vec2& in_pos, const int in_type)
+	void Menu::Init(const vec2& in_pos, const int in_type)		//Sets the position of the buttons
 	{
 		if (initialized == false)
 		{
@@ -13,7 +13,7 @@ namespace Tmpl8
 		}
 	}
 
-	void Menu::Button(Surface* gameScreen)
+	void Menu::Button(Surface* gameScreen)		//All buttons draw function and functionality of the buttons
 	{
 		switch (ButtonTypes(type))
 		{
@@ -83,7 +83,7 @@ namespace Tmpl8
 		}
 	}
 
-	void Menu::DrawCheckBox(Surface* gameScreen)
+	void Menu::DrawCheckBox(Surface* gameScreen)		//Draw function
 	{
 		Sprite CheckBoxtrue(new Surface("assets/UI/Menu/CheckBox-true.png"), 1);
 		Sprite CheckBoxfalse(new Surface("assets/UI/Menu/CheckBox-false.png"), 1);
@@ -97,7 +97,7 @@ namespace Tmpl8
 		}
 	}
 
-	void Menu::TestClick()
+	void Menu::TestClick()		//Tests if the checkbox is clicked
 	{
 		int mousex;
 		int mousey;
@@ -124,7 +124,7 @@ namespace Tmpl8
 		}
 	}
 
-	bool Menu::TestClickBigButton()
+	bool Menu::TestClickBigButton()		//Tests if the big buttons is clicked
 	{
 		int mousex;
 		int mousey;
@@ -145,7 +145,7 @@ namespace Tmpl8
 		return false;
 	}
 
-	void Menu::GoalSliderMark(Surface* gameScreen)
+	void Menu::GoalSliderMark(Surface* gameScreen)		//Sets the end wall position by draging the slider
 	{
 		int mousex;
 		int mousey;

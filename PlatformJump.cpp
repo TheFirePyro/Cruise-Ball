@@ -1,24 +1,24 @@
 #include "PlatformJump.h"
 namespace Tmpl8 {
 
-	void PlatformJump::Update(const int x, const int y)
+	void PlatformJump::Update(const int x, const int y)		//Updates the position of the jump platform
 	{
 		pos.x = (float)x - 31;
 		pos.y = (float)y - 10;
 	}
 
-	void PlatformJump::UpdateX(const Ball* ball)
+	void PlatformJump::UpdateX(const Ball* ball)		//Updates the position of the jump platform relative to the ball
 	{
 		pos.x -= ball->vel.x;
 	}
 
-	void PlatformJump::DrawPlatform(Surface* gameScreen)
+	void PlatformJump::DrawPlatform(Surface* gameScreen)		//Draw function
 	{
 		Sprite JumpPlatform(new Surface("assets/UI/Platforms/JumpPlatform.png"), 1);
 		JumpPlatform.Draw(gameScreen, (int)pos.x, (int)pos.y);
 	}
 
-	void PlatformJump::TestCollision(Ball* ball)
+	void PlatformJump::TestCollision(Ball* ball)		//Tests collision on ball and jump platform
 	{
 		const float ballright = ball->pos.x + (float)ball->width;
 		const float ballbottom = ball->pos.y + (float)ball->height;

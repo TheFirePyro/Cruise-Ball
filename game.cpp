@@ -78,12 +78,12 @@ namespace Tmpl8
 				ball.Init(pos, vel);
 			}
 			ui.DrawBackground(screen, &MenuButtons[0]);
-			if (MenuButtons[4].clicked)
+			if (MenuButtons[4].clicked) //chase button
 			{
 				Sprite ChasingWall(new Surface("assets/UI/ChasingWall.png"), 1);
 				ChasingWall.Draw(screen, -58, 0);
 			}
-			if (MenuButtons[1].clicked)
+			if (MenuButtons[1].clicked) //rockets button
 			{
 				rocketX -= 10;
 				Sprite rocket(new Surface("assets/UI/Rocket.png"), 1);
@@ -97,7 +97,7 @@ namespace Tmpl8
 			{
 				rocketX = 900;
 			}
-			if (MenuButtons[3].clicked)
+			if (MenuButtons[3].clicked) //enemies button
 			{
 				Sprite ball_bouncer(new Surface("assets/UI/follower.png"), 1);
 				ball_bouncer.Draw(screen, (int)modes.EnemiesPos.x, (int)modes.EnemiesPos.y);
@@ -123,17 +123,17 @@ namespace Tmpl8
 			ui.DrawBase(screen, &ball, &MenuButtons[2]);
 			for (int i = 0; i < 7; ++i)
 			{
-				MenuButtons[i].Button(screen);
+				MenuButtons[i].Button(screen);  //Draw buttons
 			}
 			vec2 goalsliderPos(100, 265);
 			MenuButtons[11].Init(goalsliderPos, 11);
-			MenuButtons[11].Button(screen);
-			if (MenuButtons[5].clicked)
+			MenuButtons[11].Button(screen);	 //goal slider
+			if (MenuButtons[5].clicked) //endless button
 			{
 				Sprite GoalSliderBorderInfinity(new Surface("assets/UI/Menu/GoalSliderBorderInfinity-options.png"), 1);
 				GoalSliderBorderInfinity.Draw(screen, (int)goalsliderPos.x + 145, (int)goalsliderPos.y - 31);
 			}
-			if (MenuButtons[6].TestClickBigButton())
+			if (MenuButtons[6].TestClickBigButton()) //start button
 			{
 				option_menu = false;
 				ball.initialized = false;
@@ -142,7 +142,7 @@ namespace Tmpl8
 			MenuButtons[9].initialized = false;
 			MenuButtons[9].Init(exitpos, 9);
 			MenuButtons[9].Button(screen);
-			if (MenuButtons[9].TestClickBigButton())
+			if (MenuButtons[9].TestClickBigButton()) //exit button
 			{
 				*exitapp = true;
 			}
@@ -150,9 +150,11 @@ namespace Tmpl8
 			Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
 			RocketMouse.Draw(screen, mousex, mousey);
 		}
-		else if (pause_menu)
+		else if (pause_menu) //pause menu
 		{
 			screen->Clear(0);
+			//////////////////////////////////////////////////////////////////////////////////
+			/// <Draw Background>
 			ui.DrawBackground(screen, &MenuButtons[0]);
 			for (int i = 0; i < WallNum; i++)
 			{
@@ -202,7 +204,7 @@ namespace Tmpl8
 			}
 			PlatP2.DrawPlatform(screen);
 			PlatP1.DrawPlatform(screen);
-
+			/////////////////////////////////////////////////////////////////////
 
 
 
@@ -211,7 +213,7 @@ namespace Tmpl8
 			vec2 resumepos(10, 125);
 			MenuButtons[10].Init(resumepos, 10);
 			MenuButtons[10].Button(screen);
-			if (MenuButtons[10].TestClickBigButton())
+			if (MenuButtons[10].TestClickBigButton()) //resume button
 			{
 				pause_menu = false;
 				ball.vel = SaveBallVel;
@@ -219,7 +221,7 @@ namespace Tmpl8
 			vec2 menupos(10, 225);
 			MenuButtons[8].Init(menupos, 8);
 			MenuButtons[8].Button(screen);
-			if (MenuButtons[8].TestClickBigButton())
+			if (MenuButtons[8].TestClickBigButton()) //menu button
 			{
 				option_menu = true;
 				pause_menu = false;
@@ -229,11 +231,11 @@ namespace Tmpl8
 			MenuButtons[9].initialized = false;
 			MenuButtons[9].Init(exitpos, 9);
 			MenuButtons[9].Button(screen);
-			if (MenuButtons[9].TestClickBigButton())
+			if (MenuButtons[9].TestClickBigButton()) //exit button
 			{
 				*exitapp = true;
 			}
-			if (GetAsyncKeyState(VK_ESCAPE) & 1 && GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+			if (GetAsyncKeyState(VK_ESCAPE) & 1 && GetAsyncKeyState(VK_ESCAPE) & 0x8000) //resume button
 			{
 				pause_menu = false;
 				ball.vel = SaveBallVel;
@@ -242,7 +244,7 @@ namespace Tmpl8
 			Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
 			RocketMouse.Draw(screen, mousex, mousey);
 		}
-		else if (win)
+		else if (win) //win menu
 		{
 		screen->Clear(0);
 		Sprite YouWin(new Surface("assets/UI/Menu/YouWin.png"), 1);
@@ -250,7 +252,7 @@ namespace Tmpl8
 		vec2 retrypos(10, 125);
 		MenuButtons[7].Init(retrypos, 7);
 		MenuButtons[7].Button(screen);
-		if (MenuButtons[7].TestClickBigButton())
+		if (MenuButtons[7].TestClickBigButton()) //retry button
 		{
 			win = false;
 			Reset();
@@ -258,7 +260,7 @@ namespace Tmpl8
 		vec2 menupos(10, 225);
 		MenuButtons[8].Init(menupos, 8);
 		MenuButtons[8].Button(screen);
-		if (MenuButtons[8].TestClickBigButton())
+		if (MenuButtons[8].TestClickBigButton()) //menu button
 		{
 			option_menu = true;
 			win = false;
@@ -268,7 +270,7 @@ namespace Tmpl8
 		MenuButtons[9].initialized = false;
 		MenuButtons[9].Init(exitpos, 9);
 		MenuButtons[9].Button(screen);
-		if (MenuButtons[9].TestClickBigButton())
+		if (MenuButtons[9].TestClickBigButton()) //exit button
 		{
 			*exitapp = true;
 		}
@@ -276,7 +278,7 @@ namespace Tmpl8
 		Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
 		RocketMouse.Draw(screen, mousex, mousey);
 		}
-		else if (lose)
+		else if (lose) //game over menu
 		{
 		screen->Clear(0);
 		Sprite GameOver(new Surface("assets/UI/Menu/GameOver.png"), 1);
@@ -284,7 +286,7 @@ namespace Tmpl8
 		vec2 retrypos(10, 125);
 		MenuButtons[7].Init(retrypos, 7);
 		MenuButtons[7].Button(screen);
-		if (MenuButtons[7].TestClickBigButton())
+		if (MenuButtons[7].TestClickBigButton()) //retry button
 		{
 			lose = false;
 			Reset();
@@ -292,7 +294,7 @@ namespace Tmpl8
 		vec2 menupos(10, 225);
 		MenuButtons[8].Init(menupos, 8);
 		MenuButtons[8].Button(screen);
-		if (MenuButtons[8].TestClickBigButton())
+		if (MenuButtons[8].TestClickBigButton()) //menu button
 		{
 			option_menu = true;
 			lose = false;
@@ -302,7 +304,7 @@ namespace Tmpl8
 		MenuButtons[9].initialized = false;
 		MenuButtons[9].Init(exitpos, 9);
 		MenuButtons[9].Button(screen);
-		if (MenuButtons[9].TestClickBigButton())
+		if (MenuButtons[9].TestClickBigButton()) //exit button
 		{
 			*exitapp = true;
 		}
@@ -310,9 +312,9 @@ namespace Tmpl8
 		Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
 		RocketMouse.Draw(screen, mousex, mousey);
 		}
-		else
+		else //The game starts
 		{
-			if (PlatAreSet == false)
+			if (PlatAreSet == false) //Sets the platform out of bounds
 			{
 				for (int i = 0; i < njumpMax; i++)
 				{
@@ -326,7 +328,7 @@ namespace Tmpl8
 				PlatP2.Update(0, -100);
 				PlatAreSet = true;
 			}
-			if (ball.initialized == false)
+			if (ball.initialized == false) //moves the ball to the start
 			{
 				vec2 pos(300, 250);
 				vec2 vel(0, 10);
@@ -337,7 +339,7 @@ namespace Tmpl8
 			ui.DrawBackground(screen, &MenuButtons[0]);
 			
 
-			if (!MenuButtons[2].clicked)
+			if (!MenuButtons[2].clicked) //if floor is lava mode is not pressed
 			{
 				if (WallVel > 800 * Walli)
 				{
@@ -350,14 +352,14 @@ namespace Tmpl8
 				}
 				map[WallNum].initialized = false;
 				WallVel += ball.vel.x;
-				for (int i = 0; i < WallNum; i++)
+				for (int i = 0; i < WallNum; i++) //This spawns the walls
 				{
 					map[i].Spawn(screen, &ball, WallPosition);
 					WallPosition++;
 				}
 			}
 			ui.StartWall(screen, &ball);
-			if (!MenuButtons[5].clicked)
+			if (!MenuButtons[5].clicked) //if endless mode is not pressed
 			{
 				ui.EndWall(screen, &ball, MenuButtons[11].EndGoal);
 			}
@@ -379,7 +381,7 @@ namespace Tmpl8
 				mousey < 70 + 10 && WisPress ||
 				mousey > 442 - 10 && WisPress ||
 				mousey < 70 + 10 && EisPress ||
-				mousey > 442 - 25 && EisPress)
+				mousey > 442 - 25 && EisPress) //This checks if you can place platforms
 			{
 				canplace = false;
 			}
@@ -388,7 +390,7 @@ namespace Tmpl8
 				canplace = true;
 			}
 
-			if (GetAsyncKeyState(VK_LBUTTON) & 1 && GetAsyncKeyState(VK_LBUTTON) & 0x8000)
+			if (GetAsyncKeyState(VK_LBUTTON) & 1 && GetAsyncKeyState(VK_LBUTTON) & 0x8000) //This places the platforms
 			{
 				if (QisPress && canplace)
 				{
@@ -416,7 +418,7 @@ namespace Tmpl8
 				}
 				if (EisPress && canplace)
 				{
-					if (Portal1Placed && !PlatP2.TestCollision(&PlatP1) && ui.start + 85 < mousex && modes.ChasingWallX + 96 < mousex)
+					if (Portal1Placed && !PlatP2.TestPortal1Collision(&PlatP1) && ui.start + 85 < mousex && modes.ChasingWallX + 96 < mousex)
 					{
 						PlatP2.Update(mousex, mousey);
 						Portal1Placed = false;
@@ -436,21 +438,22 @@ namespace Tmpl8
 			ui.DrawBase(screen, &ball, &MenuButtons[2]);
 			
 
-			for (int i = 0; i < njumpMax; i++)
+			for (int i = 0; i < njumpMax; i++) //This updates the jump platform
 			{
 				PlatJ[i].DrawPlatform(screen);
 				PlatJ[i].TestCollision(&ball);
 				PlatJ[i].UpdateX(&ball);
 			}
-			for (int i = 0; i < nspeedMax; i++)
+			for (int i = 0; i < nspeedMax; i++) //This updates the speed platform
 			{
 				PlatS[i].DrawPlatform(screen);
 				PlatS[i].TestCollision(&ball);
 				PlatS[i].UpdateX(&ball);
 			}
 			PlatP2.DrawPlatform(screen);
-			PlatP2.UpdateX(&ball, &PlatP1);
-			if (!(ball.pos.x == 300))
+			PlatP2.Teleport(&ball, &PlatP1);
+			PlatP2.UpdateX(&ball);
+			if (!(ball.pos.x == 300)) //This Teleports all of the surroundings
 			{
 				for (int i = 0; i < 21; i++)
 				{
@@ -472,7 +475,7 @@ namespace Tmpl8
 				}
 				PlatP1.pos.x -= (ball.pos.x - 300);
 				PlatP2.pos.x -= (ball.pos.x - 300);
-				ui.BaseVel += (ball.pos.x - 300);
+				ui.BasePos += (ball.pos.x - 300);
 				ui.start -= (ball.pos.x - 300);
 				ui.end -= (ball.pos.x - 300);
 			}
@@ -481,8 +484,7 @@ namespace Tmpl8
 
 			Cursor();
 
-
-			if (GetAsyncKeyState(VK_ESCAPE) & 1 && GetAsyncKeyState(VK_ESCAPE) & 0x8000)
+			if (GetAsyncKeyState(VK_ESCAPE) & 1 && GetAsyncKeyState(VK_ESCAPE) & 0x8000)//This pauses the game
 			{
 				pause_menu = true;
 				SaveBallVel = ball.vel;

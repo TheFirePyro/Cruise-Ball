@@ -3,19 +3,11 @@
 namespace Tmpl8
 {
 
-
-
-
-
 	void Modes::DarkMode(Surface* gameScreen, const Ball* ball, const Menu* menu)
 	{
 		if (menu->clicked)
 		{
 			darkmodeY = -362 + ball->pos.y;
-			if (!(ball->pos.x == 300))
-			{
-				darkmodeY -= ball->pos.x;
-			}
 			Sprite darkmode(new Surface("assets/UI/DarkMode.png"), 1);
 			darkmode.Draw(gameScreen, -5, (int)darkmodeY);
 		}
@@ -153,7 +145,7 @@ namespace Tmpl8
 		}
 	}
 
-	bool Modes::BeachballCollision(const Ball* ball, float x, float y)
+	bool Modes::BeachballCollision(const Ball* ball, float x, float y)//Sphere-Sphere Collision
 	{
 		float xdist = x - ball->pos.x;
 		float ydist = y - ball->pos.y;

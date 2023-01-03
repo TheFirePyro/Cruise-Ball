@@ -24,15 +24,27 @@ public:
 	void KeyUp( int key ) { /* implement if you want to handle keys */ }
 	void KeyDown( int key ) { /* implement if you want to handle keys */ }
 private:
+	//////////////////////////////////////////////
+	/// <Classes>
 	Surface* screen;
 	Ball ball;
 	UI ui;
 	Map map[21];
 	Modes modes;
 	Menu MenuButtons[12];
+	static constexpr int njumpMax = 7;
+	static constexpr int nspeedMax = 7;
+	PlatformJump PlatJ[njumpMax];
+	PlatformSpeed PlatS[nspeedMax];
+	PlatformPortal1 PlatP1;
+	PlatformPortal2 PlatP2;
+	//////////////////////////////////////////////
+	/// </Functions>
 	void Cursor();
 	void SwapPlatform();
 	void Reset();
+	/////////////////////////////////////////////
+	/// <Variables>
 	bool QisPress = true;
 	bool WisPress = false;
 	bool EisPress = false;
@@ -41,6 +53,7 @@ private:
 	bool option_menu = true;
 	bool pause_menu = false;
 	bool PlatAreSet = false;
+	bool Portal1Placed = false;
 	bool &win = ui.win;
 	bool &lose = modes.lose;
 	vec2 SaveBallVel;
@@ -49,18 +62,12 @@ private:
 	int WallNum = 0;
 	int Walli = 1;
 	int WallPosition = 0;
-	float WallVel;
 	int rocketX = 900;
 	int njump = 0;
 	int nspeed = 0;
 	int nportal = 0;
-	bool Portal1Placed = false;
-	static constexpr int njumpMax = 7;
-	static constexpr int nspeedMax = 7;
-	PlatformJump PlatJ[njumpMax];
-	PlatformSpeed PlatS[nspeedMax];
-	PlatformPortal1 PlatP1;
-	PlatformPortal2 PlatP2;
+	float WallVel;
+	////////////////////////////////////////////
 
 
 };

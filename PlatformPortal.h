@@ -8,11 +8,11 @@ namespace Tmpl8 {
 	class PlatformPortal1
 	{
 	public:
-		void Update(const int x, const int y);
-		void UpdateX(const Ball* ball);
-		void DrawPlatform(Surface* gameScreen);
-		vec2 pos;
-		static constexpr int width = 80;
+		void Update(const int x, const int y);				//Updates the position of portal1
+		void UpdateX(const Ball* ball);						//Updates the position of portal2 relative to the ball
+		void DrawPlatform(Surface* gameScreen);				//Draw function
+		vec2 pos;	//Position vector of portal1
+		static constexpr int width = 80;	//the width and height of portal1
 		static constexpr int height = 34;
 	private:
 
@@ -20,15 +20,14 @@ namespace Tmpl8 {
 	class PlatformPortal2
 	{
 	public:
-		void Update(const int x, const int y);
-		void UpdateX(Ball* ball, PlatformPortal1* P1);
-		void DrawPlatform(Surface* gameScreen);
-		void Teleport(Ball* ball, PlatformPortal1* P1);
-		bool TestCollision(PlatformPortal1* P1);
-		bool TestWallCollision(Map* map);
-		vec2 pos;
+		void Update(const int x, const int y);				//Updates the position of portal2
+		void UpdateX(Ball* ball);							//Updates the position of portal2 relative to the ball
+		void DrawPlatform(Surface* gameScreen);				//Draw function
+		void Teleport(Ball* ball, PlatformPortal1* P1);		//Teleports the ball to portal2 if the ball is in portal1
+		bool TestPortal1Collision(const PlatformPortal1* P1) const;		//Testing collision on portal1 and portal2 so that they are not on top of each other
+		vec2 pos;	//Position vector of portal2
 	private:
-		static constexpr int width = 80;
+		static constexpr int width = 80;	//The width and height of portal2
 		static constexpr int height = 34;
 	};
 }

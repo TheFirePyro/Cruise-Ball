@@ -3,7 +3,7 @@ namespace Tmpl8 {
 
 
 
-	void Ball::Init(const vec2& in_pos, const vec2& in_vel)
+	void Ball::Init(const vec2& in_pos, const vec2& in_vel)	//Sets the ball position
 	{
 		assert(initialized == false);
 		pos = in_pos;
@@ -12,7 +12,7 @@ namespace Tmpl8 {
 		initialized = true;
 	}
 
-	void Ball::DrawBall(Surface* gameScreen)
+	void Ball::DrawBall(Surface* gameScreen) //Draw function
 	{
 		assert(initialized == true);
 		Sprite Ball(new Surface("assets/UI/kiwi.png"), 1);
@@ -84,7 +84,7 @@ namespace Tmpl8 {
 		}
 	}
 
-	void Ball::Trajectory(Surface* gameScreen, const float dt)
+	void Ball::Trajectory(Surface* gameScreen, const float dt) //A simple trajectory of the ball
 	{
 		assert(initialized == true);
 		for (int i = 0; i < 50; i++)

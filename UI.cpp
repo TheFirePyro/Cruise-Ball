@@ -2,43 +2,43 @@
 namespace Tmpl8
 {
 	
-	void UI::DrawBase(Surface* gameScreen, Ball* ball, Menu* menu)
+	void UI::DrawBase(Surface* gameScreen, Ball* ball, Menu* menu)		//Draw function for sky and ground
 	{
 		if (menu->clicked)
 		{
 			Sprite FloorIsLava(new Surface("assets/UI/FloorIsLava.png"), 1);
-			if (BaseVel > basex * position)
+			if (BasePos > basex * position)
 			{
 				position++;
 			}
-			if (BaseVel < basex * (position - 1))
+			if (BasePos < basex * (position - 1))
 			{
 				position--;
 			}
-			BaseVel += ball->vel.x;
-			FloorIsLava.Draw(gameScreen, basex * (position - 2) - (int)BaseVel, 0);
-			FloorIsLava.Draw(gameScreen, basex * (position - 1) - (int)BaseVel, 0);
-			FloorIsLava.Draw(gameScreen, basex * position - (int)BaseVel, 0);
+			BasePos += ball->vel.x;
+			FloorIsLava.Draw(gameScreen, basex * (position - 2) - (int)BasePos, 0);
+			FloorIsLava.Draw(gameScreen, basex * (position - 1) - (int)BasePos, 0);
+			FloorIsLava.Draw(gameScreen, basex * position - (int)BasePos, 0);
 		}
 		else
 		{
 			Sprite Base(new Surface("assets/UI/Base.png"), 1);
-			if (BaseVel > basex * position)
+			if (BasePos > basex * position)
 			{
 				position++;
 			}
-			if (BaseVel < basex * (position - 1))
+			if (BasePos < basex * (position - 1))
 			{
 				position--;
 			}
-			BaseVel += ball->vel.x;
-			Base.Draw(gameScreen, basex * (position - 2) - (int)BaseVel, 0);
-			Base.Draw(gameScreen, basex * (position - 1) - (int)BaseVel, 0);
-			Base.Draw(gameScreen, basex * position - (int)BaseVel, 0);
+			BasePos += ball->vel.x;
+			Base.Draw(gameScreen, basex * (position - 2) - (int)BasePos, 0);
+			Base.Draw(gameScreen, basex * (position - 1) - (int)BasePos, 0);
+			Base.Draw(gameScreen, basex * position - (int)BasePos, 0);
 		}
 	}
 
-	void UI::DrawBackground(Surface* gameScreen, Menu* menu)
+	void UI::DrawBackground(Surface* gameScreen, Menu* menu)		//Draw function for the background
 	{
 		if (menu->clicked)
 		{
@@ -52,7 +52,7 @@ namespace Tmpl8
 		}
 	}
 
-	void UI::StartWall(Surface* gameScreen, Ball* ball)
+	void UI::StartWall(Surface* gameScreen, Ball* ball)		//Draw function for the starting wall
 	{
 		if (setPos == false)
 		{ 
@@ -68,7 +68,7 @@ namespace Tmpl8
 		}
 	}
 
-	void UI::EndWall(Surface* gameScreen, Ball* ball, float endgoal)
+	void UI::EndWall(Surface* gameScreen, Ball* ball, float endgoal)		//Draw function for the ending wall
 	{
 		if (!(ball->pos.x == 300))
 		{
