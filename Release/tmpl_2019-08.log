@@ -1,4 +1,6 @@
-﻿  PlatformPortal.cpp
+﻿  Menu.cpp
+  Modes.cpp
+  UI.cpp
   game.cpp
   template.cpp
   Generating Code...

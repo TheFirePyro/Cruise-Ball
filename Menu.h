@@ -21,7 +21,8 @@ namespace Tmpl8 {
 			menu = 8,
 			exit = 9,
 			resume = 10,
-			goal_slider = 11
+			goal_slider = 11,
+			music = 12
 		};
 
 		void Init(const vec2& in_pos, const int in_type);	//Sets the position of the buttons

@@ -80,6 +80,12 @@ namespace Tmpl8
 		GoalSlider.Draw(gameScreen, (int)pos.x, (int)pos.y);
 		GoalSliderMark(gameScreen); }
 		break;
+		case Menu::ButtonTypes::music:
+		{Sprite Resume(new Surface("assets/UI/Menu/Music-options.png"), 1);
+		Resume.Draw(gameScreen, (int)pos.x, (int)pos.y);
+		TestClick();
+		DrawCheckBox(gameScreen); }
+		break;
 		}
 	}
 

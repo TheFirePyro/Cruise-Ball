@@ -125,6 +125,19 @@ namespace Tmpl8
 			{
 				MenuButtons[i].Button(screen);  //Draw buttons
 			}
+			vec2 musicPos(10, 468);
+			MenuButtons[12].Init(musicPos, 12);
+			MenuButtons[12].Button(screen);	 //music button
+			if (MenuButtons[12].clicked && !music)	//if music button is on
+			{
+				PlaySound("assets//music.wav", NULL, SND_LOOP | SND_ASYNC);
+				music = true;
+			}
+			else if (!MenuButtons[12].clicked && music)
+			{
+				PlaySound(NULL, NULL, 0);
+				music = false;
+			}
 			vec2 goalsliderPos(100, 265);
 			MenuButtons[11].Init(goalsliderPos, 11);
 			MenuButtons[11].Button(screen);	 //goal slider

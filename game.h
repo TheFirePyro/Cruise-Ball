@@ -31,7 +31,7 @@ private:
 	UI ui;
 	Map map[21];
 	Modes modes;
-	Menu MenuButtons[12];
+	Menu MenuButtons[13];
 	static constexpr int njumpMax = 7;
 	static constexpr int nspeedMax = 7;
 	PlatformJump PlatJ[njumpMax];
@@ -56,6 +56,7 @@ private:
 	bool Portal1Placed = false;
 	bool &win = ui.win;
 	bool &lose = modes.lose;
+	bool music = false;
 	vec2 SaveBallVel;
 	int mousex;
 	int mousey;
