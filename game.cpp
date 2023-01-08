@@ -92,6 +92,11 @@ namespace Tmpl8
 			}
 			if (!WallsAreInitialized)
 			{
+					if (MenuButtons[5].clicked)
+					{
+							MenuButtons[11].nWallsInLevel = 300;
+					}
+
 					walls.reserve(MenuButtons[11].nWallsInLevel + 1);
 
 					for (int i = 0; i <= MenuButtons[11].nWallsInLevel; i++)
@@ -325,8 +330,10 @@ namespace Tmpl8
 		ball.meter = 0;
 		ball.initialized = false;
 		ui.setPos = false;
+		modes.RocketTime = 0;
 		modes.EnemiesPos.x = 750;
 		modes.EnemiesPos.y = 150;
+		modes.EnemiesTime = 0;
 		modes.BeachballPos[0].x = 750;
 		modes.BeachballPos[1].x = 750;
 		modes.BeachballPos[1].y = 300;

@@ -29,6 +29,7 @@ namespace Tmpl8 {
 
 		//rocket
 		vec2 RocketPos;	//Position vector of rockets
+		float RocketTime;		//The time period between rockets
 
 		//TheFloorIsLava
 		bool InitLavaPlat = false;	//Puts a jump platform so you not die
@@ -40,12 +41,12 @@ namespace Tmpl8 {
 		vec2 EnemiesPos;		//Position vector of the enemies
 		vec2 BeachballPos[2];	//Position vector of the beachballs
 		EnemyTypes Etype;		//The type of the enemy
+		float EnemiesTime;		//The time period between enemies
 	private:
 		//darkmode
 		float darkmodeY;//Y position for dark mode
 
 		//rocket
-		float RocketTime;		//The time period between rockets
 		static constexpr int rocketwidth = 106;	//The width and height of the rockets
 		static constexpr int rocketheight = 42;
 
@@ -53,7 +54,6 @@ namespace Tmpl8 {
 		bool InitRandom = false;		//The enemy randomizer
 		float EnemiesVelY;		//Y position for the enemies
 		float BeachballVelY;	//Y position for the beachballs
-		float EnemiesTime;		//The time period between enemies
 		float Moves = 1;		//The number times that the follower(enemy type) moves
 		static constexpr int height = 25;//The width and height of the enemies
 		static constexpr int radius = 12;
