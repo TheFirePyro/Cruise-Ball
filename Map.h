@@ -12,6 +12,7 @@ namespace Tmpl8 {
 		void UpdateX(const Ball* ball);											//Updates the position of the wall relative to the ball
 		void DrawWall(Surface* gameScreen);										//Draw function
 		void TestCollision(Ball* ball);											//Tests collision on the ball and wall
+		void Randomizer(const int direction);
 		vec2 pos0;//Position vector of point one
 		vec2 pos1;//Position vector of point two
 		bool initialized = false;

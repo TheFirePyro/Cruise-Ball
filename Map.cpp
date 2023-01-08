@@ -17,24 +17,7 @@ namespace Tmpl8
 
 	void Map::Spawn(Surface* gameScreen, Ball* ball, const int direction)	//Combines all functions and set position parameters
 	{
-		std::random_device rd;
-		std::mt19937 rng(rd());
-		if (direction % 2 == 0) //up parameters
-		{
-			std::uniform_int_distribution<int> xDist0(800, 850);
-			std::uniform_int_distribution<int> yDist0(30, 31);
-			std::uniform_int_distribution<int> xDist1(900, 950);
-			std::uniform_int_distribution<int> yDist1(100, 150);
-			Init((float)xDist0(rng), (float)yDist0(rng), (float)xDist1(rng), (float)yDist1(rng));
-		}
-		else //down parameters
-		{
-			std::uniform_int_distribution<int> xDist0(800, 850);
-			std::uniform_int_distribution<int> yDist0(300, 350);
-			std::uniform_int_distribution<int> xDist1(900, 950);
-			std::uniform_int_distribution<int> yDist1(442, 443);
-			Init((float)xDist0(rng), (float)yDist0(rng), (float)xDist1(rng), (float)yDist1(rng));
-		}
+		Randomizer(direction);
 		UpdateX(ball);
 		DrawWall(gameScreen);
 		TestCollision(ball);
@@ -97,6 +80,30 @@ namespace Tmpl8
 				ball->pos.x = pos1.x;
 				ball->vel.x = -ball->vel.x;
 			}
+		}
+	}
+
+	void Map::Randomizer(const int direction)
+	{
+		std::random_device rd;
+		std::mt19937 rng(rd());
+		if (direction % 2 == 0) //up parameters
+		{
+			std::uniform_int_distribution<int> xDist(800, 850);
+			std::uniform_int_distribution<int> yDist(30, 31);
+			std::uniform_int_distribution<int> wDist(100, 300);
+			std::uniform_int_distribution<int> hDist(100, 150);
+			float x = (float)xDist(rng) * direction;
+			Init(x, (float)yDist(rng), x + (float)wDist(rng), (float)hDist(rng));
+		}
+		else //down parameters
+		{
+			std::uniform_int_distribution<int> xDist(800, 850);
+			std::uniform_int_distribution<int> yDist(300, 350);
+			std::uniform_int_distribution<int> wDist(100, 300);
+			std::uniform_int_distribution<int> hDist(442, 443);
+			float x = (float)xDist(rng) * direction;
+			Init(x, (float)yDist(rng), x + (float)wDist(rng), (float)hDist(rng));
 		}
 	}
 

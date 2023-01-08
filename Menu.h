@@ -36,6 +36,7 @@ namespace Tmpl8 {
 		float EndGoal;//Marks the end
 		bool clicked = false;//if the button is clicked
 		bool initialized = false;//if the button is set
+		int nWallsInLevel;//How many wall are in the level
 	private:
 		bool GoalSliderHold = false;//when is the slider hold
 		int box_x;//X position of checkbox

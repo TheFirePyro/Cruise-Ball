@@ -19,14 +19,14 @@ namespace Tmpl8
 		int x[7] { 100, 100, 100, 500, 500, 500, 325 };
 		int y[7] { 300, 350, 400, 300, 350, 400, 350 };
 		int type[7] { 0, 1, 2, 3, 4, 5, 6 };
-		for (int i = 0; i < 7; ++i)                       //here we set the menu buttons
+		for (const int n : type)                       //here we set the menu buttons
 		{
-			vec2 pos((float)x[i], (float)y[i]);
-			MenuButtons[i].Init(pos, type[i]);
+				vec2 pos((float)x[n], (float)y[n]);
+				MenuButtons[n].Init(pos, type[n]);
 		}
-		vec2 pos(50, 200);
-		vec2 vel(0, 10);         //menu ball is set
-		ball.Init(pos, vel);
+			vec2 pos(50, 200);
+			vec2 vel(0, 10);         //menu ball is set
+			ball.Init(pos, vel);
 	}
 
 	// -----------------------------------------------------------
@@ -46,284 +46,25 @@ namespace Tmpl8
 	
 	void Game::Tick(float deltaTime, int* exitapp )
 	{
-		if (title_screen)
+		if (title_screen) //title screen
 		{
-			screen->Clear(0);
-			ShowCursor(FALSE);
-			Sprite title(new Surface("assets/UI/Menu/title.png"), 1);
-			Sprite background(new Surface("assets/UI/background.png"), 1);
-			background.Draw(screen, 0, 0);
-			ball.DrawBall(screen);
-			ball.BallBehaviour(deltaTime);
-			PlatJ[0].Update(60, 350);
-			PlatJ[0].TestCollision(&ball);
-			PlatJ[0].DrawPlatform(screen);
-			ui.DrawBase(screen, &ball, &MenuButtons[2]);
-			title.Draw(screen, 200, 75);
-			if (GetKeyState(VK_SPACE))
-			{
-				title_screen = false;
-			}
-			Uint32 mouse = SDL_GetMouseState(&mousex, &mousey);
-			Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
-			RocketMouse.Draw(screen, mousex, mousey);
+			goToTitleScreen(deltaTime);
 		}
-		else if (option_menu)
+		else if (option_menu) //option menu
 		{
-			screen->Clear(0);
-			if (ball.initialized == false)
-			{
-				vec2 pos(50, 200);
-				vec2 vel(0, 10);
-				ball.Init(pos, vel);
-			}
-			ui.DrawBackground(screen, &MenuButtons[0]);
-			if (MenuButtons[4].clicked) //chase button
-			{
-				Sprite ChasingWall(new Surface("assets/UI/ChasingWall.png"), 1);
-				ChasingWall.Draw(screen, -58, 0);
-			}
-			if (MenuButtons[1].clicked) //rockets button
-			{
-				rocketX -= 10;
-				Sprite rocket(new Surface("assets/UI/Rocket.png"), 1);
-				rocket.Draw(screen, rocketX, 100);
-				if (rocketX < -200)
-				{
-					rocketX = 1500;
-				}
-			}
-			else
-			{
-				rocketX = 900;
-			}
-			if (MenuButtons[3].clicked) //enemies button
-			{
-				Sprite ball_bouncer(new Surface("assets/UI/follower.png"), 1);
-				ball_bouncer.Draw(screen, (int)modes.EnemiesPos.x, (int)modes.EnemiesPos.y);
-				Sprite Beachball0(new Surface("assets/UI/beachball.png"), 1);
-				Beachball0.Draw(screen, (int)modes.BeachballPos[0].x, (int)modes.BeachballPos[0].y);
-				Sprite Beachball1(new Surface("assets/UI/beachball.png"), 1);
-				Beachball1.Draw(screen, (int)modes.BeachballPos[1].x, (int)modes.BeachballPos[1].y);
-				modes.BeachballBehaviour(&ball, deltaTime);
-			}
-			else
-			{
-				modes.EnemiesPos.x = 750;
-				modes.EnemiesPos.y = 150;
-				modes.BeachballPos[0].x = 750;
-				modes.BeachballPos[1].x = 750;
-				modes.BeachballPos[1].y = 300;
-			}
-			ball.DrawBall(screen);
-			ball.BallBehaviour(deltaTime);
-			PlatJ[0].Update(60, 350);
-			PlatJ[0].TestCollision(&ball);
-			PlatJ[0].DrawPlatform(screen);
-			ui.DrawBase(screen, &ball, &MenuButtons[2]);
-			for (int i = 0; i < 7; ++i)
-			{
-				MenuButtons[i].Button(screen);  //Draw buttons
-			}
-			vec2 musicPos(10, 468);
-			MenuButtons[12].Init(musicPos, 12);
-			MenuButtons[12].Button(screen);	 //music button
-			if (MenuButtons[12].clicked && !music)	//if music button is on
-			{
-				PlaySound("assets//music.wav", NULL, SND_LOOP | SND_ASYNC);
-				music = true;
-			}
-			else if (!MenuButtons[12].clicked && music)
-			{
-				PlaySound(NULL, NULL, 0);
-				music = false;
-			}
-			vec2 goalsliderPos(100, 265);
-			MenuButtons[11].Init(goalsliderPos, 11);
-			MenuButtons[11].Button(screen);	 //goal slider
-			if (MenuButtons[5].clicked) //endless button
-			{
-				Sprite GoalSliderBorderInfinity(new Surface("assets/UI/Menu/GoalSliderBorderInfinity-options.png"), 1);
-				GoalSliderBorderInfinity.Draw(screen, (int)goalsliderPos.x + 145, (int)goalsliderPos.y - 31);
-			}
-			if (MenuButtons[6].TestClickBigButton()) //start button
-			{
-				option_menu = false;
-				ball.initialized = false;
-			}
-			vec2 exitpos(325, 400);
-			MenuButtons[9].initialized = false;
-			MenuButtons[9].Init(exitpos, 9);
-			MenuButtons[9].Button(screen);
-			if (MenuButtons[9].TestClickBigButton()) //exit button
-			{
-				*exitapp = true;
-			}
-			Uint32 mouse = SDL_GetMouseState(&mousex, &mousey);
-			Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
-			RocketMouse.Draw(screen, mousex, mousey);
+			goToOptionScreen(deltaTime, exitapp);
 		}
 		else if (pause_menu) //pause menu
 		{
-			screen->Clear(0);
-			//////////////////////////////////////////////////////////////////////////////////
-			/// <Draw Background>
-			ui.DrawBackground(screen, &MenuButtons[0]);
-			for (int i = 0; i < WallNum; i++)
-			{
-				map[i].DrawWall(screen);
-			}
-			ui.StartWall(screen, &ball);
-			ui.EndWall(screen, &ball, MenuButtons[11].EndGoal);
-			if (MenuButtons[3].clicked)
-			{
-				switch (modes.Etype)
-				{
-				case Modes::EnemyTypes::ball_bouncer:
-				{Sprite ball_bouncer(new Surface("assets/UI/follower.png"), 1);
-				ball_bouncer.Draw(screen, (int)modes.EnemiesPos.x, (int)modes.EnemiesPos.y);
-				Sprite Beachball0(new Surface("assets/UI/beachball.png"), 1);
-				Beachball0.Draw(screen, (int)modes.BeachballPos[0].x, (int)modes.BeachballPos[0].y);
-				Sprite Beachball1(new Surface("assets/UI/beachball.png"), 1);
-				Beachball1.Draw(screen, (int)modes.BeachballPos[1].x, (int)modes.BeachballPos[1].y); }
-					break;
-				case Modes::EnemyTypes::follower:
-				{Sprite follower(new Surface("assets/UI/follower.png"), 1);
-				follower.Draw(screen, (int)modes.EnemiesPos.x, (int)modes.EnemiesPos.y); }
-					break;
-				}
-			}
-			if (MenuButtons[1].clicked)
-			{
-				Sprite rocket(new Surface("assets/UI/Rocket.png"), 1);
-				rocket.Draw(screen, (int)modes.RocketPos.x, (int)modes.RocketPos.y);
-			}
-			modes.TheFloorIsLava(&ball, &MenuButtons[2], &PlatJ[0]);
-			if (MenuButtons[4].clicked)
-			{
-				Sprite ChasingWall(new Surface("assets/UI/ChasingWall.png"), 1);
-				ChasingWall.Draw(screen, (int)modes.ChasingWallX, 0);
-			}
-			ball.DrawBall(screen);
-			modes.DarkMode(screen, &ball, &MenuButtons[0]);
-			ui.DrawBase(screen, &ball, &MenuButtons[2]);
-			for (int i = 0; i < njumpMax; i++)
-			{
-				PlatJ[i].DrawPlatform(screen);
-			}
-			for (int i = 0; i < nspeedMax; i++)
-			{
-				PlatS[i].DrawPlatform(screen);
-			}
-			PlatP2.DrawPlatform(screen);
-			PlatP1.DrawPlatform(screen);
-			/////////////////////////////////////////////////////////////////////
-
-
-
-			Sprite pausemenu(new Surface("assets/UI/Menu/pause-menu.png"), 1);
-			pausemenu.Draw(screen, 0, 0);
-			vec2 resumepos(10, 125);
-			MenuButtons[10].Init(resumepos, 10);
-			MenuButtons[10].Button(screen);
-			if (MenuButtons[10].TestClickBigButton()) //resume button
-			{
-				pause_menu = false;
-				ball.vel = SaveBallVel;
-			}
-			vec2 menupos(10, 225);
-			MenuButtons[8].Init(menupos, 8);
-			MenuButtons[8].Button(screen);
-			if (MenuButtons[8].TestClickBigButton()) //menu button
-			{
-				option_menu = true;
-				pause_menu = false;
-				Reset();
-			}
-			vec2 exitpos(10, 325);
-			MenuButtons[9].initialized = false;
-			MenuButtons[9].Init(exitpos, 9);
-			MenuButtons[9].Button(screen);
-			if (MenuButtons[9].TestClickBigButton()) //exit button
-			{
-				*exitapp = true;
-			}
-			if (GetAsyncKeyState(VK_ESCAPE) & 1 && GetAsyncKeyState(VK_ESCAPE) & 0x8000) //resume button
-			{
-				pause_menu = false;
-				ball.vel = SaveBallVel;
-			}
-			Uint32 mouse = SDL_GetMouseState(&mousex, &mousey);
-			Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
-			RocketMouse.Draw(screen, mousex, mousey);
+			goToPauseScreen(deltaTime, exitapp);
 		}
 		else if (win) //win menu
 		{
-		screen->Clear(0);
-		Sprite YouWin(new Surface("assets/UI/Menu/YouWin.png"), 1);
-		YouWin.Draw(screen, 0, 0);
-		vec2 retrypos(10, 125);
-		MenuButtons[7].Init(retrypos, 7);
-		MenuButtons[7].Button(screen);
-		if (MenuButtons[7].TestClickBigButton()) //retry button
-		{
-			win = false;
-			Reset();
-		}
-		vec2 menupos(10, 225);
-		MenuButtons[8].Init(menupos, 8);
-		MenuButtons[8].Button(screen);
-		if (MenuButtons[8].TestClickBigButton()) //menu button
-		{
-			option_menu = true;
-			win = false;
-			Reset();
-		}
-		vec2 exitpos(10, 325);
-		MenuButtons[9].initialized = false;
-		MenuButtons[9].Init(exitpos, 9);
-		MenuButtons[9].Button(screen);
-		if (MenuButtons[9].TestClickBigButton()) //exit button
-		{
-			*exitapp = true;
-		}
-		Uint32 mouse = SDL_GetMouseState(&mousex, &mousey);
-		Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
-		RocketMouse.Draw(screen, mousex, mousey);
+			goToWinScreen(exitapp);
 		}
 		else if (lose) //game over menu
 		{
-		screen->Clear(0);
-		Sprite GameOver(new Surface("assets/UI/Menu/GameOver.png"), 1);
-		GameOver.Draw(screen, 0, 0);
-		vec2 retrypos(10, 125);
-		MenuButtons[7].Init(retrypos, 7);
-		MenuButtons[7].Button(screen);
-		if (MenuButtons[7].TestClickBigButton()) //retry button
-		{
-			lose = false;
-			Reset();
-		}
-		vec2 menupos(10, 225);
-		MenuButtons[8].Init(menupos, 8);
-		MenuButtons[8].Button(screen);
-		if (MenuButtons[8].TestClickBigButton()) //menu button
-		{
-			option_menu = true;
-			lose = false;
-			Reset();
-		}
-		vec2 exitpos(10, 325);
-		MenuButtons[9].initialized = false;
-		MenuButtons[9].Init(exitpos, 9);
-		MenuButtons[9].Button(screen);
-		if (MenuButtons[9].TestClickBigButton()) //exit button
-		{
-			*exitapp = true;
-		}
-		Uint32 mouse = SDL_GetMouseState(&mousex, &mousey);
-		Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
-		RocketMouse.Draw(screen, mousex, mousey);
+			goToLoseScreen(exitapp);
 		}
 		else //The game starts
 		{
@@ -331,56 +72,61 @@ namespace Tmpl8
 			{
 				for (int i = 0; i < njumpMax; i++)
 				{
-					PlatJ[i].Update(0, -100);
+						PlatJ[i].Update(0, -100);
 				}
+
 				for (int i = 0; i < nspeedMax; i++)
 				{
-					PlatS[i].Update(0, -100);
+						PlatS[i].Update(0, -100);
 				}
+
 				PlatP1.Update(0, -100);
 				PlatP2.Update(0, -100);
 				PlatAreSet = true;
 			}
 			if (ball.initialized == false) //moves the ball to the start
 			{
-				vec2 pos(300, 250);
-				vec2 vel(0, 10);
-				ball.Init(pos, vel);
+					vec2 pos(300, 250);
+					vec2 vel(0, 10);
+					ball.Init(pos, vel);
+			}
+			if (!WallsAreInitialized)
+			{
+					walls.reserve(MenuButtons[11].nWallsInLevel + 1);
+
+					for (int i = 0; i <= MenuButtons[11].nWallsInLevel; i++)
+					{
+							walls.push_back(map);
+					}
+
+					WallsAreInitialized = true;
 			}
 
 			screen->Clear(0);
 			ui.DrawBackground(screen, &MenuButtons[0]);
 			
 
-			if (!MenuButtons[2].clicked) //if floor is lava mode is not pressed
+			if (!MenuButtons[2].clicked) //if floor is lava it is not pressed
 			{
-				if (WallVel > 800 * Walli)
-				{
-					Walli ++;
-					WallNum ++;
-				}
-				if (WallNum == 20)
-				{
-					WallNum = 0;
-				}
-				map[WallNum].initialized = false;
-				WallVel += ball.vel.x;
-				for (int i = 0; i < WallNum; i++) //This spawns the walls
-				{
-					map[i].Spawn(screen, &ball, WallPosition);
-					WallPosition++;
-				}
+					for (int i = 0; i <= MenuButtons[11].nWallsInLevel; i++) //This spawns the walls
+					{
+							walls[i].Spawn(screen, &ball, WallPosition);
+							WallPosition++;
+					}
 			}
+
+
 			ui.StartWall(screen, &ball);
 			if (!MenuButtons[5].clicked) //if endless mode is not pressed
 			{
-				ui.EndWall(screen, &ball, MenuButtons[11].EndGoal);
+					ui.EndWall(screen, &ball, MenuButtons[11].EndGoal);
 			}
 			ui.setPos = true;
 
 			modes.Enemies(screen, &ball, &MenuButtons[3], deltaTime);
 			modes.TheFloorIsLava(&ball, &MenuButtons[2], &PlatJ[0]);
 			modes.Chase(screen, &ball, &MenuButtons[4]);
+
 			ball.BallBehaviour(deltaTime);
 			ball.DrawBall(screen);
 			ball.Trajectory(screen, deltaTime);
@@ -396,101 +142,108 @@ namespace Tmpl8
 				mousey < 70 + 10 && EisPress ||
 				mousey > 442 - 25 && EisPress) //This checks if you can place platforms
 			{
-				canplace = false;
+					canplace = false;
 			}
 			else
 			{
-				canplace = true;
+					canplace = true;
 			}
 
 			if (GetAsyncKeyState(VK_LBUTTON) & 1 && GetAsyncKeyState(VK_LBUTTON) & 0x8000) //This places the platforms
 			{
-				if (QisPress && canplace)
-				{
-					if (njump == njumpMax - 1)
+					if (QisPress && canplace)
 					{
-						njump = 0;
+							if (njump == njumpMax - 1)
+							{
+									njump = 0;
+							}
+							else
+							{
+									njump++;
+							}
+							PlatJ[njump].Update(mousex, mousey);
 					}
-					else
+
+					if (WisPress && canplace)
 					{
-						njump++;
+							if (nspeed == nspeedMax - 1)
+							{
+									nspeed = 0;
+							}
+							else
+							{
+									nspeed++;
+							}
+							PlatS[nspeed].Update(mousex, mousey);
 					}
-					PlatJ[njump].Update(mousex, mousey);
-				}
-				if (WisPress && canplace)
-				{
-					if (nspeed == nspeedMax - 1)
+
+					if (EisPress && canplace)
 					{
-						nspeed = 0;
+							if (Portal1Placed && !PlatP2.TestPortal1Collision(&PlatP1) && ui.start + 85 < mousex && modes.ChasingWallX + 96 < mousex)
+							{
+									PlatP2.Update(mousex, mousey);
+									Portal1Placed = false;
+							}
+							else if (ui.start + 85 < mousex && modes.ChasingWallX + 96 < mousex)
+							{
+									PlatP1.Update(mousex, mousey);
+									Portal1Placed = true;
+									PlatP2.Update(-50, -50);
+							}
 					}
-					else
-					{
-						nspeed++;
-					}
-					PlatS[nspeed].Update(mousex, mousey);
-				}
-				if (EisPress && canplace)
-				{
-					if (Portal1Placed && !PlatP2.TestPortal1Collision(&PlatP1) && ui.start + 85 < mousex && modes.ChasingWallX + 96 < mousex)
-					{
-						PlatP2.Update(mousex, mousey);
-						Portal1Placed = false;
-					}
-					else if (ui.start + 85 < mousex && modes.ChasingWallX + 96 < mousex)
-					{
-						PlatP1.Update(mousex, mousey);
-						Portal1Placed = true;
-						PlatP2.Update(-50, -50);
-					}
-				}
 			}
 
 			
 			modes.DarkMode(screen, &ball, &MenuButtons[0]);
 			modes.Rockets(screen, &ball, &MenuButtons[1], deltaTime);
+
 			ui.DrawBase(screen, &ball, &MenuButtons[2]);
 			
 
 			for (int i = 0; i < njumpMax; i++) //This updates the jump platform
 			{
-				PlatJ[i].DrawPlatform(screen);
-				PlatJ[i].TestCollision(&ball);
-				PlatJ[i].UpdateX(&ball);
+					PlatJ[i].DrawPlatform(screen);
+					PlatJ[i].TestCollision(&ball);
+					PlatJ[i].UpdateX(&ball);
 			}
 			for (int i = 0; i < nspeedMax; i++) //This updates the speed platform
 			{
-				PlatS[i].DrawPlatform(screen);
-				PlatS[i].TestCollision(&ball);
-				PlatS[i].UpdateX(&ball);
+					PlatS[i].DrawPlatform(screen);
+					PlatS[i].TestCollision(&ball);
+					PlatS[i].UpdateX(&ball);
 			}
 			PlatP2.DrawPlatform(screen);
 			PlatP2.Teleport(&ball, &PlatP1);
 			PlatP2.UpdateX(&ball);
 			if (!(ball.pos.x == 300)) //This Teleports all of the surroundings
 			{
-				for (int i = 0; i < 21; i++)
-				{
-					map[i].pos0.x -= (ball.pos.x - 300);
-					map[i].pos1.x -= (ball.pos.x - 300);
-				}
-				modes.RocketPos.x -= (ball.pos.x - 300);
-				modes.ChasingWallX -= (ball.pos.x - 300);
-				modes.EnemiesPos.x -= (ball.pos.x - 300);
-				modes.BeachballPos[0].x -= (ball.pos.x - 300);
-				modes.BeachballPos[1].x -= (ball.pos.x - 300);
-				for (int i = 0; i < njumpMax; i++)
-				{
-					PlatJ[i].pos.x -= (ball.pos.x - 300);
-				}
-				for (int i = 0; i < nspeedMax; i++)
-				{
-					PlatS[i].pos.x -= (ball.pos.x - 300);
-				}
-				PlatP1.pos.x -= (ball.pos.x - 300);
-				PlatP2.pos.x -= (ball.pos.x - 300);
-				ui.BasePos += (ball.pos.x - 300);
-				ui.start -= (ball.pos.x - 300);
-				ui.end -= (ball.pos.x - 300);
+					for (int i = 0; i <= MenuButtons[11].nWallsInLevel; i++)
+					{
+							walls[i].pos0.x -= (ball.pos.x - 300);
+							walls[i].pos1.x -= (ball.pos.x - 300);
+					}
+
+					modes.RocketPos.x -= (ball.pos.x - 300);
+					modes.ChasingWallX -= (ball.pos.x - 300);
+					modes.EnemiesPos.x -= (ball.pos.x - 300);
+					modes.BeachballPos[0].x -= (ball.pos.x - 300);
+					modes.BeachballPos[1].x -= (ball.pos.x - 300);
+
+					for (int i = 0; i < njumpMax; i++)
+					{
+							PlatJ[i].pos.x -= (ball.pos.x - 300);
+					}
+
+					for (int i = 0; i < nspeedMax; i++)
+					{
+							PlatS[i].pos.x -= (ball.pos.x - 300);
+					}
+
+					PlatP1.pos.x -= (ball.pos.x - 300);
+					PlatP2.pos.x -= (ball.pos.x - 300);
+					ui.BasePos += (ball.pos.x - 300);
+					ui.start -= (ball.pos.x - 300);
+					ui.end -= (ball.pos.x - 300);
 			}
 			PlatP1.DrawPlatform(screen);
 			PlatP1.UpdateX(&ball);
@@ -499,9 +252,9 @@ namespace Tmpl8
 
 			if (GetAsyncKeyState(VK_ESCAPE) & 1 && GetAsyncKeyState(VK_ESCAPE) & 0x8000)//This pauses the game
 			{
-				pause_menu = true;
-				SaveBallVel = ball.vel;
-				ball.vel = 0;
+					pause_menu = true;
+					SaveBallVel = ball.vel;
+					ball.vel = 0;
 			}
 		}
 	}
@@ -579,12 +332,350 @@ namespace Tmpl8
 		modes.BeachballPos[1].y = 300;
 		modes.InitLavaPlat = false;
 		modes.ChasingWallX = 0;
-		for (int i = 0; i < 3; i++)
+		WallsAreInitialized = false;
+		WallPosition = 1;
+		walls.clear();
+	}
+
+	void Game::goToTitleScreen(const float deltaTime)
+	{
+		screen->Clear(0);
+
+		ShowCursor(FALSE);
+
+		Sprite background(new Surface("assets/UI/background.png"), 1);
+		background.Draw(screen, 0, 0);
+
+		ball.DrawBall(screen);
+		ball.BallBehaviour(deltaTime);
+
+		PlatJ[0].Update(60, 350);
+		PlatJ[0].TestCollision(&ball);
+		PlatJ[0].DrawPlatform(screen);
+
+		ui.DrawBase(screen, &ball, &MenuButtons[2]);
+
+		Sprite title(new Surface("assets/UI/Menu/title.png"), 1);
+		title.Draw(screen, 200, 75);
+
+		Uint32 mouse = SDL_GetMouseState(&mousex, &mousey);
+		Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
+		RocketMouse.Draw(screen, mousex, mousey);
+
+		if (GetKeyState(VK_SPACE))
 		{
-			map[i].initialized = false;
+			title_screen = false;
 		}
 	}
 
+	void Game::goToOptionScreen(const float deltaTime, int* exitapp)
+	{
+		screen->Clear(0);
 
+		if (ball.initialized == false)
+		{
+				vec2 pos(50, 200);
+				vec2 vel(0, 10);
+				ball.Init(pos, vel);
+		}
+
+		ui.DrawBackground(screen, &MenuButtons[0]);
+
+		if (MenuButtons[4].clicked) //chase button
+		{
+				Sprite ChasingWall(new Surface("assets/UI/ChasingWall.png"), 1);
+				ChasingWall.Draw(screen, -58, 0);
+		}
+
+		if (MenuButtons[1].clicked) //rockets button
+		{
+				rocketX -= 10;
+				Sprite rocket(new Surface("assets/UI/Rocket.png"), 1);
+				rocket.Draw(screen, rocketX, 100);
+				if (rocketX < -200)
+				{
+						rocketX = 1500;
+				}
+		}
+		else
+		{
+				rocketX = 900;
+		}
+
+		if (MenuButtons[3].clicked) //enemies button
+		{
+				Sprite ball_bouncer(new Surface("assets/UI/follower.png"), 1);
+				ball_bouncer.Draw(screen, (int)modes.EnemiesPos.x, (int)modes.EnemiesPos.y);
+
+				Sprite Beachball0(new Surface("assets/UI/beachball.png"), 1);
+				Beachball0.Draw(screen, (int)modes.BeachballPos[0].x, (int)modes.BeachballPos[0].y);
+
+				Sprite Beachball1(new Surface("assets/UI/beachball.png"), 1);
+				Beachball1.Draw(screen, (int)modes.BeachballPos[1].x, (int)modes.BeachballPos[1].y);
+
+				modes.BeachballBehaviour(&ball, deltaTime);
+		}
+		else
+		{
+					modes.EnemiesPos.x =	 750;
+					modes.EnemiesPos.y =	 150;
+				modes.BeachballPos[0].x =	 750;
+				modes.BeachballPos[1].x =	 750;
+				modes.BeachballPos[1].y =	 300;
+		}
+
+		ball.DrawBall(screen);
+		ball.BallBehaviour(deltaTime);
+
+		PlatJ[0].Update(60, 350);
+		PlatJ[0].TestCollision(&ball);
+		PlatJ[0].DrawPlatform(screen);
+
+		ui.DrawBase(screen, &ball, &MenuButtons[2]);
+
+		for (int i = 0; i < 7; ++i)
+		{
+				MenuButtons[i].Button(screen);  //Draw buttons
+		}
+
+		vec2 musicPos(10, 468);
+		MenuButtons[12].Init(musicPos, 12);
+		MenuButtons[12].Button(screen);	 //music button
+		if (MenuButtons[12].clicked && !music)	//if music button is on
+		{
+				PlaySound("assets//music.wav", NULL, SND_LOOP | SND_ASYNC);
+				music = true;
+		}
+		else if (!MenuButtons[12].clicked && music)
+		{
+				PlaySound(NULL, NULL, 0);
+				music = false;
+		}
+
+		vec2 goalsliderPos(100, 265);
+		MenuButtons[11].Init(goalsliderPos, 11);
+		MenuButtons[11].Button(screen);	 //goal slider
+		if (MenuButtons[5].clicked) //endless button
+		{
+				Sprite GoalSliderBorderInfinity(new Surface("assets/UI/Menu/GoalSliderBorderInfinity-options.png"), 1);
+				GoalSliderBorderInfinity.Draw(screen, (int)goalsliderPos.x + 145, (int)goalsliderPos.y - 31);
+		}
+
+		if (MenuButtons[6].TestClickBigButton()) //start button
+		{
+				option_menu = false;
+				ball.initialized = false;
+		}
+
+		vec2 exitpos(325, 400);
+		MenuButtons[9].initialized = false;
+		MenuButtons[9].Init(exitpos, 9);
+		MenuButtons[9].Button(screen);
+		if (MenuButtons[9].TestClickBigButton()) //exit button
+		{
+				*exitapp = true;
+		}
+
+		Uint32 mouse = SDL_GetMouseState(&mousex, &mousey);
+		Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
+		RocketMouse.Draw(screen, mousex, mousey);
+	}
+
+	void Game::goToPauseScreen(const float deltaTime, int* exitapp)
+	{
+		screen->Clear(0);
+		//////////////////////////////////////////////////////////////////////////////////
+		/// <Draw Background>
+		ui.DrawBackground(screen, &MenuButtons[0]);
+
+		for (int i = 0; i <= MenuButtons[11].nWallsInLevel; i++)
+		{
+				walls[i].DrawWall(screen);
+		}
+
+		ui.StartWall(screen, &ball);
+		ui.EndWall(screen, &ball, MenuButtons[11].EndGoal);
+
+		if (MenuButtons[3].clicked)
+		{
+				switch (modes.Etype)
+				{
+				case Modes::EnemyTypes::ball_bouncer:
+				{
+						Sprite ball_bouncer(new Surface("assets/UI/follower.png"), 1);
+						ball_bouncer.Draw(screen, (int)modes.EnemiesPos.x, (int)modes.EnemiesPos.y);
+
+						Sprite Beachball0(new Surface("assets/UI/beachball.png"), 1);
+						Beachball0.Draw(screen, (int)modes.BeachballPos[0].x, (int)modes.BeachballPos[0].y);
+
+						Sprite Beachball1(new Surface("assets/UI/beachball.png"), 1);
+						Beachball1.Draw(screen, (int)modes.BeachballPos[1].x, (int)modes.BeachballPos[1].y); 
+				}
+				break;
+
+				case Modes::EnemyTypes::follower:
+				{
+						Sprite follower(new Surface("assets/UI/follower.png"), 1);
+						follower.Draw(screen, (int)modes.EnemiesPos.x, (int)modes.EnemiesPos.y); 
+				}
+				break;
+				}
+		}
+
+		if (MenuButtons[1].clicked)
+		{
+				Sprite rocket(new Surface("assets/UI/Rocket.png"), 1);
+				rocket.Draw(screen, (int)modes.RocketPos.x, (int)modes.RocketPos.y);
+		}
+
+		modes.TheFloorIsLava(&ball, &MenuButtons[2], &PlatJ[0]);
+
+		if (MenuButtons[4].clicked)
+		{
+				Sprite ChasingWall(new Surface("assets/UI/ChasingWall.png"), 1);
+				ChasingWall.Draw(screen, (int)modes.ChasingWallX, 0);
+		}
+
+		ball.DrawBall(screen);
+
+		modes.DarkMode(screen, &ball, &MenuButtons[0]);
+
+		ui.DrawBase(screen, &ball, &MenuButtons[2]);
+
+		for (int i = 0; i < njumpMax; i++)
+		{
+				PlatJ[i].DrawPlatform(screen);
+		}
+		for (int i = 0; i < nspeedMax; i++)
+		{
+				PlatS[i].DrawPlatform(screen);
+		}
+		PlatP2.DrawPlatform(screen);
+		PlatP1.DrawPlatform(screen);
+		/////////////////////////////////////////////////////////////////////
+
+
+
+		Sprite pausemenu(new Surface("assets/UI/Menu/pause-menu.png"), 1);
+		pausemenu.Draw(screen, 0, 0);
+
+		vec2 resumepos(10, 125);
+		MenuButtons[10].Init(resumepos, 10);
+		MenuButtons[10].Button(screen);
+		if (MenuButtons[10].TestClickBigButton()) //resume button
+		{
+				pause_menu = false;
+				ball.vel = SaveBallVel;
+		}
+
+		vec2 menupos(10, 225);
+		MenuButtons[8].Init(menupos, 8);
+		MenuButtons[8].Button(screen);
+		if (MenuButtons[8].TestClickBigButton()) //menu button
+		{
+				option_menu = true;
+				pause_menu = false;
+				Reset();
+		}
+
+		vec2 exitpos(10, 325);
+		MenuButtons[9].initialized = false;
+		MenuButtons[9].Init(exitpos, 9);
+		MenuButtons[9].Button(screen);
+		if (MenuButtons[9].TestClickBigButton()) //exit button
+		{
+				*exitapp = true;
+		}
+
+		if (GetAsyncKeyState(VK_ESCAPE) & 1 && GetAsyncKeyState(VK_ESCAPE) & 0x8000) //resume button
+		{
+				pause_menu = false;
+				ball.vel = SaveBallVel;
+		}
+
+		Uint32 mouse = SDL_GetMouseState(&mousex, &mousey);
+		Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
+		RocketMouse.Draw(screen, mousex, mousey);
+	}
+
+	void Game::goToWinScreen(int* exitapp)
+	{
+		screen->Clear(0);
+
+		Sprite YouWin(new Surface("assets/UI/Menu/YouWin.png"), 1);
+		YouWin.Draw(screen, 0, 0);
+
+		vec2 retrypos(10, 125);
+		MenuButtons[7].Init(retrypos, 7);
+		MenuButtons[7].Button(screen);
+		if (MenuButtons[7].TestClickBigButton()) //retry button
+		{
+				win = false;
+				Reset();
+		}
+
+		vec2 menupos(10, 225);
+		MenuButtons[8].Init(menupos, 8);
+		MenuButtons[8].Button(screen);
+		if (MenuButtons[8].TestClickBigButton()) //menu button
+		{
+				option_menu = true;
+				win = false;
+				Reset();
+		}
+
+		vec2 exitpos(10, 325);
+		MenuButtons[9].initialized = false;
+		MenuButtons[9].Init(exitpos, 9);
+		MenuButtons[9].Button(screen);
+		if (MenuButtons[9].TestClickBigButton()) //exit button
+		{
+				*exitapp = true;
+		}
+
+		Uint32 mouse = SDL_GetMouseState(&mousex, &mousey);
+		Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
+		RocketMouse.Draw(screen, mousex, mousey);
+	}
+
+	void Game::goToLoseScreen(int* exitapp)
+	{
+		screen->Clear(0);
+
+		Sprite GameOver(new Surface("assets/UI/Menu/GameOver.png"), 1);
+		GameOver.Draw(screen, 0, 0);
+
+		vec2 retrypos(10, 125);
+		MenuButtons[7].Init(retrypos, 7);
+		MenuButtons[7].Button(screen);
+		if (MenuButtons[7].TestClickBigButton()) //retry button
+		{
+				lose = false;
+				Reset();
+		}
+
+		vec2 menupos(10, 225);
+		MenuButtons[8].Init(menupos, 8);
+		MenuButtons[8].Button(screen);
+		if (MenuButtons[8].TestClickBigButton()) //menu button
+		{
+				option_menu = true;
+				lose = false;
+				Reset();
+		}
+
+		vec2 exitpos(10, 325);
+		MenuButtons[9].initialized = false;
+		MenuButtons[9].Init(exitpos, 9);
+		MenuButtons[9].Button(screen);
+		if (MenuButtons[9].TestClickBigButton()) //exit button
+		{
+				*exitapp = true;
+		}
+
+		Uint32 mouse = SDL_GetMouseState(&mousex, &mousey);
+		Sprite RocketMouse(new Surface("assets/UI/RocketMouse.png"), 1);
+		RocketMouse.Draw(screen, mousex, mousey);
+	}
 
 }

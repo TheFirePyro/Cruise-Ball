@@ -98,11 +98,15 @@ namespace Tmpl8
 				{
 				Sprite ball_bouncer(new Surface("assets/UI/follower.png"), 1);
 				ball_bouncer.Draw(gameScreen, (int)EnemiesPos.x, (int)EnemiesPos.y);
+
 				Sprite Beachball0(new Surface("assets/UI/beachball.png"), 1);
 				Beachball0.Draw(gameScreen, (int)BeachballPos[0].x, (int)BeachballPos[0].y);
+
 				Sprite Beachball1(new Surface("assets/UI/beachball.png"), 1);
 				Beachball1.Draw(gameScreen, (int)BeachballPos[1].x, (int)BeachballPos[1].y);
+
 				if (BeachballCollision(ball, EnemiesPos.x, EnemiesPos.y)) lose = true, EnemiesTime = 0;
+
 				BeachballBehaviour(ball, dt);
 				}
 				break;
@@ -110,7 +114,9 @@ namespace Tmpl8
 				{
 				Sprite follower(new Surface("assets/UI/follower.png"), 1);
 				follower.Draw(gameScreen, (int)EnemiesPos.x, (int)EnemiesPos.y);
+
 				if (BeachballCollision(ball, EnemiesPos.x, EnemiesPos.y)) lose = true, EnemiesTime = 0;
+
 				if (EnemiesTime > 10 * Moves)
 				{
 					Moves++;

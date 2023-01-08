@@ -8,6 +8,7 @@
 #include "Modes.h"
 #include "UI.h"
 #include <random>
+#include <vector>
 namespace Tmpl8 {
 
 class Surface;
@@ -28,21 +29,33 @@ private:
 	/// <Classes>
 	Surface* screen;
 	Ball ball;
-	UI ui;
-	Map map[21];
 	Modes modes;
-	Menu MenuButtons[13];
-	static constexpr int njumpMax = 7;
-	static constexpr int nspeedMax = 7;
+	UI ui;
+
+	Map map;
+	std::vector< Map > walls;
+
+	static constexpr unsigned __int8 nMenuButtonsMax = 13;
+	Menu MenuButtons[nMenuButtonsMax];
+
+	static constexpr unsigned __int8 njumpMax = 7;
 	PlatformJump PlatJ[njumpMax];
+
+	static constexpr unsigned __int8 nspeedMax = 7;
 	PlatformSpeed PlatS[nspeedMax];
+
 	PlatformPortal1 PlatP1;
 	PlatformPortal2 PlatP2;
 	//////////////////////////////////////////////
-	/// </Functions>
+	/// <Functions>
 	void Cursor();
 	void SwapPlatform();
 	void Reset();
+	void goToTitleScreen(const float deltaTime);
+	void goToOptionScreen(const float deltaTime, int* exitapp);
+	void goToPauseScreen(const float deltaTime, int* exitapp);
+	void goToWinScreen(int* exitapp);
+	void goToLoseScreen(int* exitapp);
 	/////////////////////////////////////////////
 	/// <Variables>
 	bool QisPress = true;
@@ -57,18 +70,20 @@ private:
 	bool &win = ui.win;
 	bool &lose = modes.lose;
 	bool music = false;
+	bool WallsAreInitialized = false;
+
 	vec2 SaveBallVel;
+
 	int mousex;
 	int mousey;
-	int WallNum = 0;
-	int Walli = 1;
-	int WallPosition = 0;
-	int rocketX = 900;
-	int njump = 0;
-	int nspeed = 0;
-	int nportal = 0;
-	float WallVel;
+	int WallPosition =	 1;
+		int rocketX =	 900;
+		int njump =		 0;
+		int nspeed =	 0;
+		int nportal =	 0;
 	////////////////////////////////////////////
+
+
 
 
 };
