@@ -248,7 +248,7 @@ namespace Tmpl8
 					PlatP2.pos.x -= (ball.pos.x - 300);
 					ui.BasePos += (ball.pos.x - 300);
 					ui.start -= (ball.pos.x - 300);
-					ui.end -= (ball.pos.x - 300);
+					ui.end -= (ball.pos.x - 400);
 			}
 			PlatP1.DrawPlatform(screen);
 			PlatP1.UpdateX(&ball);
@@ -501,7 +501,10 @@ namespace Tmpl8
 		}
 
 		ui.StartWall(screen, &ball);
-		ui.EndWall(screen, &ball, MenuButtons[11].EndGoal);
+		if (!MenuButtons[5].clicked)
+		{
+				ui.EndWall(screen, &ball, MenuButtons[11].EndGoal);
+		}
 
 		if (MenuButtons[3].clicked)
 		{
